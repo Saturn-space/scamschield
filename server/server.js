@@ -48,6 +48,7 @@ app.get('/api/health', (req, res) => {
 
 // Mount route files (we'll create these next)
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', require('./routes/userAuth'));
 app.use('/api/session', require('./routes/sessions'));
 app.use('/api/attempt', require('./routes/attempts'));
 app.use('/api/game', require('./routes/games'));

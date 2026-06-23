@@ -2397,6 +2397,281 @@
     }
 
     /* ══════════════════════════════════════════════════════════
+       USER LOGIN/SIGNUP MODAL
+    ══════════════════════════════════════════════════════════ */
+    .user-auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+      animation: fadeIn .2s ease;
+    }
+
+    .user-auth-box {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border: 1px solid rgba(59, 130, 246, .3);
+      border-radius: 20px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, .6), 0 0 40px rgba(59, 130, 246, .15);
+      animation: fadeIn .3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .user-auth-header {
+      text-align: center;
+      padding: 28px 28px 20px;
+      border-bottom: 1px solid rgba(59, 130, 246, .15);
+    }
+
+    .user-auth-icon {
+      font-size: 42px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 20px rgba(59, 130, 246, .5));
+    }
+
+    .user-auth-header h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      background: linear-gradient(90deg, #3b82f6, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .user-auth-header p {
+      font-size: 13px;
+      color: var(--text3);
+    }
+
+    .user-auth-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 16px 28px 0;
+      background: var(--bg3);
+      border-radius: 0;
+    }
+
+    .user-auth-tab {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px 8px 0 0;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text3);
+      transition: all .15s;
+      border: none;
+      background: transparent;
+      font-family: var(--font);
+      text-align: center;
+    }
+
+    .user-auth-tab.active {
+      background: var(--bg2);
+      color: var(--text);
+    }
+
+    .user-auth-field {
+      margin: 14px 28px;
+    }
+
+    .user-auth-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text2);
+      margin-bottom: 6px;
+      letter-spacing: .3px;
+    }
+
+    .user-auth-field input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-family: var(--font);
+      color: var(--text);
+      outline: none;
+      transition: all .15s;
+    }
+
+    .user-auth-field input:focus {
+      border-color: var(--blue);
+      background: var(--bg2);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, .1);
+    }
+
+    .user-auth-field input::placeholder {
+      color: var(--text3);
+    }
+
+    .user-auth-error {
+      margin: 0 28px 12px;
+      padding: 10px 14px;
+      background: rgba(239, 68, 68, .1);
+      border: 1px solid rgba(239, 68, 68, .3);
+      border-radius: 8px;
+      font-size: 12px;
+      color: #fca5a5;
+    }
+
+    .user-auth-success {
+      margin: 0 28px 12px;
+      padding: 10px 14px;
+      background: rgba(34, 197, 94, .1);
+      border: 1px solid rgba(34, 197, 94, .3);
+      border-radius: 8px;
+      font-size: 12px;
+      color: #86efac;
+    }
+
+    .user-auth-actions {
+      display: flex;
+      gap: 10px;
+      margin: 20px 28px 8px;
+    }
+
+    .user-auth-cancel {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text2);
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all .15s;
+    }
+
+    .user-auth-cancel:hover {
+      background: var(--bg4);
+      color: var(--text);
+    }
+
+    .user-auth-submit {
+      flex: 2;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .user-auth-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(59, 130, 246, .4);
+    }
+
+    .user-auth-submit:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .user-auth-footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text3);
+      padding: 12px 28px 24px;
+      border-top: 1px solid rgba(59, 130, 246, .1);
+      margin-top: 8px;
+    }
+
+    .user-auth-footer a {
+      color: var(--blue);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .user-auth-footer a:hover {
+      color: #93c5fd;
+    }
+
+    .user-info-pill {
+      background: rgba(34, 197, 94, .1);
+      border: 1px solid rgba(34, 197, 94, .3);
+      color: #86efac;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .user-info-pill:hover {
+      background: rgba(34, 197, 94, .2);
+    }
+
+    .user-info-pill .user-avatar {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .login-nav-btn {
+      background: linear-gradient(135deg, rgba(59, 130, 246, .15), rgba(99, 102, 241, .15));
+      border: 1px solid rgba(59, 130, 246, .4);
+      color: #93c5fd;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .login-nav-btn:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, .3), rgba(99, 102, 241, .3));
+    }
+
+    .btn-del-user {
+      background: rgba(239, 68, 68, .08);
+      border: 1px solid rgba(239, 68, 68, .2);
+      color: #fca5a5;
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all .15s;
+    }
+
+    .btn-del-user:hover {
+      background: rgba(239, 68, 68, .18);
+    }
+
+    /* ══════════════════════════════════════════════════════════
        CONFIRMATION MODAL
     ══════════════════════════════════════════════════════════ */
     .confirm-overlay {
@@ -2629,6 +2904,7 @@
             style="font-size:12px;color:var(--text3)">Connecting…</span></span>
         <div class="risk-badge">Risk: <span id="nav-risk">0</span></div>
         <div class="progress-pill">Done: <b id="nav-done">0</b>/23</div>
+        <div id="user-auth-nav"></div>
         <div class="admin-link" onclick="openAdmin()">⚙ Admin</div>
         <div class="games-nav-btn" onclick="openGamesSidebar()">🎮 Games &amp; Quizzes</div>
       </div>
@@ -2825,10 +3101,11 @@
       </div>
 
       <!-- Tabs -->
-      <div class="admin-tabs">
+            <div class="admin-tabs">
         <button class="atab active" onclick="switchTab('recent')">Recent Activity</button>
         <button class="atab" onclick="switchTab('modules')">By Module</button>
         <button class="atab" onclick="switchTab('sessions')">Sessions</button>
+        <button class="atab" onclick="switchTab('users')">👥 Users</button>
       </div>
 
       <!-- Recent Activity -->
@@ -2873,6 +3150,27 @@
               </tr>
             </thead>
             <tbody id="tbl-sessions-body"></tbody>
+          </table>
+        </div>
+      </div>
+            <!-- Users -->
+      <div class="admin-section" id="tab-users">
+        <div class="tbl-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Joined</th>
+                <th>Last Login</th>
+                <th>Sessions</th>
+                <th>Attempts</th>
+                <th>Done</th>
+                <th>Avg Risk</th>
+                <th>Del</th>
+              </tr>
+            </thead>
+            <tbody id="tbl-users-body"></tbody>
           </table>
         </div>
       </div>
@@ -3660,14 +3958,17 @@
     // ─── APP STATE ──────────────────────────────────────────────────────────────
     // ─── API CONFIG ─────────────────────────────────────────────────────────────
     // Change this to your deployed backend URL when ready
-    const API_BASE = 'http://localhost:5000/api';
+    const API_BASE = 'https://scamshield-api-wgca.onrender.com/api';
     const API_ENABLED = true;  // Set to false to force localStorage-only mode
 
     // Admin token storage
     const LS_ADMIN_TOKEN = 'ss_admin_token';
+        // User auth tokens
+    const LS_USER_TOKEN = 'ss_user_token';
+    const LS_USER_DATA = 'ss_user_data';
 
     // ─── APP STATE ──────────────────────────────────────────────────────────────
-    let state = { risk: 0, completed: [], currentModule: null, quizScore: 0, quizIdx: 0, quizAnswered: false, exposedData: [], sessionId: null };
+    let state = { risk: 0, completed: [], currentModule: null, quizScore: 0, quizIdx: 0, quizAnswered: false, exposedData: [], sessionId: null, currentUser: null };
     let adminData = { totals: {}, byModule: [], recent: [], sessions: [] };
     let timerInt = null;
 
@@ -3694,11 +3995,24 @@
     // Kept for compatibility — all calls now use local* functions
 
     // ─── INIT SESSION ───────────────────────────────────────────────────────────
-    async function initSession() {
+        async function initSession() {
       setConnStatus('loading', 'Connecting…');
 
       // Check API connection
       const apiOk = await checkAPIConnection();
+
+      // Restore user from localStorage
+      const savedUser = localStorage.getItem(LS_USER_DATA);
+      if (savedUser) {
+        try {
+          state.currentUser = JSON.parse(savedUser);
+        } catch (e) {
+          localStorage.removeItem(LS_USER_DATA);
+        }
+      }
+
+      // Update UI with user info
+      updateUserNav();
 
       // Start session
       const stored = localStorage.getItem(LS_CUR_SID);
@@ -3710,6 +4024,174 @@
         setConnStatus('ok', 'Backend Connected ✓');
       } else {
         setConnStatus('err', 'Offline Mode (localStorage)');
+      }
+    }
+
+    // ─── USER AUTH ──────────────────────────────────────────
+    function openUserAuth(tab) {
+      tab = tab || 'login';
+      document.getElementById('user-auth-overlay').style.display = 'flex';
+      switchAuthTab(tab);
+      document.getElementById('ua-login-error').style.display = 'none';
+      document.getElementById('ua-signup-error').style.display = 'none';
+    }
+
+    function closeUserAuth() {
+      document.getElementById('user-auth-overlay').style.display = 'none';
+      document.getElementById('ua-login-username').value = '';
+      document.getElementById('ua-login-password').value = '';
+      document.getElementById('ua-signup-username').value = '';
+      document.getElementById('ua-signup-email').value = '';
+      document.getElementById('ua-signup-fullname').value = '';
+      document.getElementById('ua-signup-password').value = '';
+    }
+
+    function switchAuthTab(tab) {
+      var isLogin = tab === 'login';
+      document.getElementById('ua-tab-login').classList.toggle('active', isLogin);
+      document.getElementById('ua-tab-signup').classList.toggle('active', !isLogin);
+      document.getElementById('ua-form-login').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('ua-form-signup').style.display = isLogin ? 'none' : 'block';
+      document.getElementById('user-auth-title').textContent = isLogin ? 'Welcome Back!' : 'Create Your Account';
+      document.getElementById('user-auth-subtitle').textContent = isLogin
+        ? 'Sign in to continue your cyber safety training'
+        : 'Join ScamShield and start learning to spot scams';
+      document.getElementById('ua-footer-text').innerHTML = isLogin
+        ? 'Don\'t have an account? <a onclick="switchAuthTab(\'signup\')">Sign up</a>'
+        : 'Already have an account? <a onclick="switchAuthTab(\'login\')">Sign in</a>';
+    }
+
+    async function handleUserLogin() {
+      var username = document.getElementById('ua-login-username').value.trim();
+      var password = document.getElementById('ua-login-password').value;
+      var errorEl = document.getElementById('ua-login-error');
+      var successEl = document.getElementById('ua-login-success');
+      var btn = document.getElementById('ua-login-btn');
+      var btnText = btn.querySelector('.ua-btn-text');
+      var spinner = btn.querySelector('.spinner');
+
+      errorEl.style.display = 'none';
+      successEl.style.display = 'none';
+
+      if (!username || !password) {
+        errorEl.textContent = 'Please enter username and password.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      spinner.style.display = 'inline-block';
+
+      try {
+        var res = await fetch(API_BASE + '/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        var data = await res.json();
+
+        if (data.ok) {
+          localStorage.setItem(LS_USER_TOKEN, data.token);
+          localStorage.setItem(LS_USER_DATA, JSON.stringify(data.user));
+          state.currentUser = data.user;
+
+          successEl.textContent = '✅ Welcome back, ' + data.user.username + '!';
+          successEl.style.display = 'block';
+
+          setTimeout(function() {
+            closeUserAuth();
+            updateUserNav();
+            showToast('Welcome back, ' + data.user.username + '!', 'ok', 'Logged In');
+          }, 800);
+        } else {
+          errorEl.textContent = '❌ ' + (data.err || 'Login failed.');
+          errorEl.style.display = 'block';
+          document.getElementById('ua-login-password').value = '';
+        }
+      } catch (e) {
+        errorEl.textContent = '⚠️ Cannot reach server. Please try again later.';
+        errorEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btnText.style.display = 'inline';
+        spinner.style.display = 'none';
+      }
+    }
+
+    async function handleUserSignup() {
+      var username = document.getElementById('ua-signup-username').value.trim();
+      var email = document.getElementById('ua-signup-email').value.trim();
+      var full_name = document.getElementById('ua-signup-fullname').value.trim();
+      var password = document.getElementById('ua-signup-password').value;
+      var errorEl = document.getElementById('ua-signup-error');
+      var btn = document.getElementById('ua-signup-btn');
+      var btnText = btn.querySelector('.ua-btn-text');
+      var spinner = btn.querySelector('.spinner');
+
+      errorEl.style.display = 'none';
+
+      if (!username || !email || !password) {
+        errorEl.textContent = 'Please fill in all required fields.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      spinner.style.display = 'inline-block';
+
+      try {
+        var res = await fetch(API_BASE + '/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password, full_name })
+        });
+        var data = await res.json();
+
+        if (data.ok) {
+          localStorage.setItem(LS_USER_TOKEN, data.token);
+          localStorage.setItem(LS_USER_DATA, JSON.stringify(data.user));
+          state.currentUser = data.user;
+
+          setTimeout(function() {
+            closeUserAuth();
+            updateUserNav();
+            showToast('Welcome to ScamShield, ' + data.user.username + '!', 'ok', 'Account Created');
+          }, 800);
+        } else {
+          errorEl.textContent = '❌ ' + (data.err || 'Signup failed.');
+          errorEl.style.display = 'block';
+        }
+      } catch (e) {
+        errorEl.textContent = '⚠️ Cannot reach server. Please try again later.';
+        errorEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btnText.style.display = 'inline';
+        spinner.style.display = 'none';
+      }
+    }
+
+    function userLogout() {
+      if (confirm('Logout from your account?')) {
+        localStorage.removeItem(LS_USER_TOKEN);
+        localStorage.removeItem(LS_USER_DATA);
+        state.currentUser = null;
+        updateUserNav();
+        showToast('Logged out successfully', 'ok');
+      }
+    }
+
+    function updateUserNav() {
+      var navContainer = document.getElementById('user-auth-nav');
+      if (!navContainer) return;
+
+      if (state.currentUser && state.currentUser.username) {
+        var initial = state.currentUser.username.charAt(0).toUpperCase();
+        navContainer.innerHTML = '<div class="user-info-pill" onclick="userLogout()" title="Click to logout"><div class="user-avatar">' + initial + '</div><span>' + state.currentUser.username + '</span></div>';
+      } else {
+        navContainer.innerHTML = '<div class="login-nav-btn" onclick="openUserAuth(\'login\')">🔐 Login / Sign Up</div>';
       }
     }
 
@@ -5153,6 +5635,77 @@
 
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  
+    <!-- ══════════════════════════════════════════════════════════
+       USER LOGIN/SIGNUP MODAL
+  ══════════════════════════════════════════════════════════ -->
+  <div id="user-auth-overlay" class="user-auth-overlay" style="display:none">
+    <div class="user-auth-box">
+      <div class="user-auth-header">
+        <div class="user-auth-icon">🛡️</div>
+        <h2 id="user-auth-title">Welcome to ScamShield</h2>
+        <p id="user-auth-subtitle">Sign in to track your progress and earn certificates</p>
+      </div>
+      <div class="user-auth-tabs">
+        <button class="user-auth-tab active" id="ua-tab-login" onclick="switchAuthTab('login')">Login</button>
+        <button class="user-auth-tab" id="ua-tab-signup" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+      
+      <!-- Login Form -->
+      <form id="ua-form-login" onsubmit="event.preventDefault(); handleUserLogin();">
+        <div class="user-auth-field">
+          <label for="ua-login-username">Username or Email</label>
+          <input type="text" id="ua-login-username" autocomplete="username" placeholder="johndoe" required>
+        </div>
+        <div class="user-auth-field">
+          <label for="ua-login-password">Password</label>
+          <input type="password" id="ua-login-password" autocomplete="current-password" placeholder="•••••••" required>
+        </div>
+        <div id="ua-login-error" class="user-auth-error" style="display:none"></div>
+        <div id="ua-login-success" class="user-auth-success" style="display:none"></div>
+        <div class="user-auth-actions">
+          <button type="button" class="user-auth-cancel" onclick="closeUserAuth()">Cancel</button>
+          <button type="submit" class="user-auth-submit" id="ua-login-btn">
+            <span class="ua-btn-text">Sign In</span>
+            <span class="spinner" style="display:none"></span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="ua-form-signup" onsubmit="event.preventDefault(); handleUserSignup();" style="display:none">
+        <div class="user-auth-field">
+          <label for="ua-signup-username">Username *</label>
+          <input type="text" id="ua-signup-username" autocomplete="username" placeholder="johndoe" required minlength="3">
+        </div>
+        <div class="user-auth-field">
+          <label for="ua-signup-email">Email *</label>
+          <input type="email" id="ua-signup-email" autocomplete="email" placeholder="you@example.com" required>
+        </div>
+        <div class="user-auth-field">
+          <label for="ua-signup-fullname">Full Name (optional)</label>
+          <input type="text" id="ua-signup-fullname" autocomplete="name" placeholder="John Doe">
+        </div>
+        <div class="user-auth-field">
+          <label for="ua-signup-password">Password *</label>
+          <input type="password" id="ua-signup-password" autocomplete="new-password" placeholder="At least 6 characters" required minlength="6">
+        </div>
+        <div id="ua-signup-error" class="user-auth-error" style="display:none"></div>
+        <div class="user-auth-actions">
+          <button type="button" class="user-auth-cancel" onclick="closeUserAuth()">Cancel</button>
+          <button type="submit" class="user-auth-submit" id="ua-signup-btn">
+            <span class="ua-btn-text">Create Account</span>
+            <span class="spinner" style="display:none"></span>
+          </button>
+        </div>
+      </form>
+
+      <div class="user-auth-footer">
+        By continuing, you agree to learn about scams safely. <br>
+        <span id="ua-footer-text">Don't have an account? <a onclick="switchAuthTab('signup')">Sign up</a></span>
+      </div>
+    </div>
+  </div>
   <!-- ══════════════════════════════════════════════════════════
    <!-- ══════════════════════════════════════════════════════════
        ADMIN LOGIN MODAL

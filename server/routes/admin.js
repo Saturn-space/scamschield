@@ -12,6 +12,7 @@ const Session = require('../models/Session');
 const Attempt = require('../models/Attempt');
 const Game = require('../models/Game');
 const Module = require('../models/Module');
+const User = require('../models/User');
 const { authenticate } = require('../middleware/auth');
 const { requireAdmin, requireAuth } = require('../middleware/admin');
 
@@ -19,6 +20,7 @@ const router = express.Router();
 
 // All admin routes require authentication
 router.use(authenticate);
+router.use(requireAdmin);
 
 // ─── GET /api/admin/stats ──────────────────────────────────────────────────
 // Dashboard statistics
@@ -296,6 +298,75 @@ router.post('/module', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Module save error:', error);
     res.status(500).json({ ok: false, err: 'Failed to save module.' });
+  }
+});
+router.get('/users', requireAdmin, async (req, res) => {
+  try {
+    const users = await User.find({})
+      .select('-password_hash')
+      .sort({ created_at: -1 });
+
+    // Get stats per user
+    const usersWithStats = await Promise.all(
+      users.map(async (user) => {
+        const userAttempts = await Attempt.find({ user_id: user._id });
+        const sessions = await Session.countDocuments({ user_id: user._id });
+        const submitted = userAttempts.filter(a => a.submitted);
+        const avg_risk = submitted.length > 0
+          ? Math.round(submitted.reduce((s, a) => s + (a.risk_score || 0), 0) / submitted.length)
+          : 0;
+
+        return {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          full_name: user.full_name,
+          created_at: user.created_at,
+          last_login: user.last_login,
+          sessions_count: sessions,
+          attempts_count: userAttempts.length,
+          completions_count: submitted.length,
+          avg_risk_score: avg_risk
+        };
+      })
+    );
+
+    res.json({ ok: true, users: usersWithStats });
+  } catch (error) {
+    console.error('Users fetch error:', error);
+    res.status(500).json({ ok: false, err: 'Failed to fetch users.' });
+  }
+});
+
+// ─── NEW: DELETE /api/admin/user/:id ─────────────────────────
+// Delete a user and all their data
+router.delete('/user/:userId', requireAdmin, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    // Delete user
+    await User.deleteOne({ _id: userId });
+    
+    // Delete user's sessions
+    await Session.deleteMany({ user_id: userId });
+    
+    // Delete user's attempts
+    const attResult = await Attempt.deleteMany({ user_id: userId });
+    
+    // Delete user's games
+    const gameResult = await Game.deleteMany({ user_id: userId });
+    
+    res.json({
+      ok: true,
+      message: 'User deleted.',
+      deleted: {
+        attempts: attResult.deletedCount,
+        games: gameResult.deletedCount
+      }
+    });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    res.status(500).json({ ok: false, err: 'Failed to delete user.' });
   }
 });
 

@@ -6,6 +6,11 @@ const attemptSchema = new mongoose.Schema({
     required: true,
     index: true
   },
+  user_id: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'User',
+  default: null  // null for guest users
+},
   module_id: {
     type: Number,
     required: true,

@@ -7,6 +7,11 @@ const sessionSchema = new mongoose.Schema({
     unique: true,
     index: true
   },
+  user_id: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'User',
+  default: null
+},
   started_at: {
     type: Date,
     default: Date.now
