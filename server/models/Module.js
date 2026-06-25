@@ -24,6 +24,7 @@ const moduleSchema = new mongoose.Schema({
   title: { type: String, required: true },
   desc: { type: String, required: true },
   diff: { type: String, enum: ['low', 'med', 'high'], default: 'med' },
+  difficulty: { type: String, enum: ['low', 'med', 'high'], default: 'med' }, // alias
   tag: { type: String, default: 'General' },
   url: { type: String, default: '' },
   badge: { type: String, default: '' },
@@ -38,7 +39,8 @@ const moduleSchema = new mongoose.Schema({
   tips: { type: [String], default: [] },
   quiz: { type: [quizOptionSchema], default: [] },
   active: { type: Boolean, default: true },
-  order: { type: Number, default: 0 }
+  order: { type: Number, default: 0 },
+  created_at: { type: Date, default: Date.now }
 }, {
   timestamps: true
 });

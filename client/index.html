@@ -4844,7 +4844,7 @@
     }
 
     // ─── RENDER MODULES ──────────────────────────────────────────────────────────
-        function renderModules() {
+    function renderModules() {
       document.getElementById('modules-grid').innerHTML = MODULES.map(m => `
     <div class="module-card ${state.completed.includes(m.id) ? 'completed' : ''}" onclick="showInfoPage(${m.id})" onkeydown="if(event.key==='Enter'||event.key===' ')showInfoPage(${m.id})" role="button" tabindex="0" aria-label="Learn about ${eh(m.title)}">
       <div class="card-icon" aria-hidden="true">${eh(m.icon)}</div>
@@ -5653,30 +5653,30 @@
 
       if (API_ENABLED && token && token !== 'local-mode') {
         try {
-                  const [statsRes, recentRes, sessionsRes, usersRes, byModuleRes] = await Promise.all([
-          fetch(API_BASE + '/admin/stats', {
-            headers: { 'Authorization': 'Bearer ' + token }
-          }),
-          fetch(API_BASE + '/admin/recent', {
-            headers: { 'Authorization': 'Bearer ' + token }
-          }),
-          fetch(API_BASE + '/admin/sessions', {
-            headers: { 'Authorization': 'Bearer ' + token }
-          }),
-          fetch(API_BASE + '/admin/users', {
-            headers: { 'Authorization': 'Bearer ' + token }
-          }),
-          fetch(API_BASE + '/admin/byModule', {
-            headers: { 'Authorization': 'Bearer ' + token }
-          })
-        ]);
+          const [statsRes, recentRes, sessionsRes, usersRes, modulesRes] = await Promise.all([
+            fetch(API_BASE + '/admin/stats', {
+              headers: { 'Authorization': 'Bearer ' + token }
+            }),
+            fetch(API_BASE + '/admin/recent', {
+              headers: { 'Authorization': 'Bearer ' + token }
+            }),
+            fetch(API_BASE + '/admin/sessions', {
+              headers: { 'Authorization': 'Bearer ' + token }
+            }),
+            fetch(API_BASE + '/admin/users', {
+              headers: { 'Authorization': 'Bearer ' + token }
+            }),
+            fetch(API_BASE + '/admin/modules', {
+              headers: { 'Authorization': 'Bearer ' + token }
+            })
+          ]);
 
                     if (statsRes.ok && recentRes.ok && sessionsRes.ok) {
             const stats = await statsRes.json();
             const recent = await recentRes.json();
             const sessions = await sessionsRes.json();
             const users = await usersRes.json();
-            const byModule = byModuleRes.ok ? await byModuleRes.json() : { byModule: [] };
+            const modules = modulesRes.ok ? await modulesRes.json() : { byModule: [] };
 
             // Format data for the existing render functions
             const formatted = {
@@ -5694,7 +5694,7 @@
                 module_tag: a.module_tag || '—',
                 difficulty: a.difficulty || '—'
               })),
-              byModule: byModule.byModule || [],
+              byModule: modules.byModule || [],
               sessions: sessions.sessions || [],
               users: users.users || []
             };
