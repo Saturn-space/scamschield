@@ -77,36 +77,36 @@ router.delete('/user/:userId', async (req, res) => {
 router.get('/user/:userId/attempts', async (req, res) => {
   try {
     const { userId } = req.params;
-    
+
     // Verify user exists
     const user = await User.findById(userId).select('-password_hash');
     if (!user) {
       return res.status(404).json({ ok: false, err: 'User not found.' });
     }
-    
+
     // Get all attempts for this user
     const attempts = await Attempt.find({ user_id: userId })
       .sort({ completed_at: -1 });
-    
+
     // Get all modules to enrich the data
     const modules = await Module.find();
     const moduleMap = {};
     modules.forEach(m => { moduleMap[m.module_id] = m; });
-    
+
     // Group attempts by module
     const byModule = {};
     let totalRisk = 0;
     let totalQuiz = 0;
     let totalModulesCompleted = 0;
     let totalGamesPlayed = 0;
-    
+
     attempts.forEach(att => {
       if (att.module_id < 0) {
         // Game attempt
         totalGamesPlayed++;
         return;
       }
-      
+
       if (!byModule[att.module_id]) {
         const meta = moduleMap[att.module_id] || {};
         byModule[att.module_id] = {
@@ -122,29 +122,29 @@ router.get('/user/:userId/attempts', async (req, res) => {
           last_attempt: null
         };
       }
-      
+
       const mod = byModule[att.module_id];
       mod.attempts++;
-      
+
       if (att.submitted) {
         mod.submitted++;
         totalModulesCompleted++;
         if ((att.risk_score || 0) > mod.best_risk) mod.best_risk = att.risk_score;
-        
+
         if (att.quiz_total > 0) {
           const pct = Math.round((att.quiz_score / att.quiz_total) * 100);
           if (pct > mod.best_quiz_pct) mod.best_quiz_pct = pct;
           totalQuiz += att.quiz_score;
         }
-        
+
         totalRisk += (att.risk_score || 0);
       }
-      
+
       if (!mod.last_attempt || new Date(att.completed_at) > new Date(mod.last_attempt)) {
         mod.last_attempt = att.completed_at;
       }
     });
-    
+
     // Calculate averages
     const modulesArr = Object.values(byModule).map(m => ({
       ...m,
@@ -152,9 +152,9 @@ router.get('/user/:userId/attempts', async (req, res) => {
       status: m.submitted > 0 ? 'completed' : 'in-progress',
       started: m.attempts > 0
     }));
-    
+
     modulesArr.sort((a, b) => a.module_id - b.module_id);
-    
+
     // Calculate overall stats
     const submittedAttempts = attempts.filter(a => a.submitted && a.module_id >= 0);
     const avg_risk = submittedAttempts.length > 0
@@ -162,13 +162,13 @@ router.get('/user/:userId/attempts', async (req, res) => {
       : 0;
     const avg_quiz_pct = submittedAttempts.filter(a => a.quiz_total > 0).length > 0
       ? Math.round(
-          submittedAttempts
-            .filter(a => a.quiz_total > 0)
-            .reduce((s, a) => s + ((a.quiz_score / a.quiz_total) * 100), 0) /
-          submittedAttempts.filter(a => a.quiz_total > 0).length
-        )
+        submittedAttempts
+          .filter(a => a.quiz_total > 0)
+          .reduce((s, a) => s + ((a.quiz_score / a.quiz_total) * 100), 0) /
+        submittedAttempts.filter(a => a.quiz_total > 0).length
+      )
       : 0;
-    
+
     res.json({
       ok: true,
       user: {
